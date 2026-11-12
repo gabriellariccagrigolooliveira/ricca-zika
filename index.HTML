@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INVOCAÇÃO DO MAL (2013) — Arquivos Confidenciais dos Warren</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Texturas cinematográficas -->
+  <div class="film-grain"></div>
+  <div class="vignette"></div>
+  <div id="flashlight-overlay"></div>
+
+  <!-- Barra de Navegação -->
+  <header class="navbar">
+    <div class="brand">
+      <span class="cross">✝</span> ARQUIVO WARREN // 1971
+    </div>
+    <nav>
+      <a href="#sinopse">O Caso</a>
+      <a href="#dossies">Dossiês</a>
+      <a href="#cronologia">3:07 AM</a>
+      <a href="#github">GitHub</a>
+    </nav>
+    <div class="controls">
+      <button id="btn-audio" class="btn-ghost" title="Ativar/Desativar Som Ambiente">🔇 Áudio: OFF</button>
+      <button id="btn-lights" class="btn-blood" title="Explorar no escuro com lanterna">🔦 Apagar Luzes</button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-stamp">BASEADO NOS ARQUIVOS REAIS DE ED & LORRAINE WARREN</div>
+    <h1 class="main-title">INVOCAÇÃO<br><span>DO MAL</span></h1>
+    <p class="subtitle">“Antes de Amityville, houve Harrisville.”</p>
+    <div class="hero-actions">
+      <button id="btn-claps" class="btn-primary">👏 Ouvir Duas Palmas na Escuridão</button>
+      <a href="#dossies" class="btn-secondary">Abrir Arquivos Confidenciais</a>
+    </div>
+    <div class="scroll-hint">▼ ROLE PARA INVESTIGAR ▼</div>
+  </section>
+
+  <!-- Sinopse & Atmosfera -->
+  <section id="sinopse" class="section container">
+    <div class="section-header">
+      <span class="case-number">RELATÓRIO DE CAMPO Nº 071-HRV</span>
+      <h2>A Fazenda dos Perron — Harrisville, Rhode Island</h2>
+    </div>
+    <div class="two-col">
+      <div class="narrative-box">
+        <p class="dropcap">
+          Em 1971, Roger e Carolyn Perron mudaram-se com suas cinco filhas para uma antiga casa de fazenda isolada em Harrisville. O que parecia ser um recomeço tranquilo rapidamente se transformou em um pesadelo implacável.
+        </p>
+        <p>
+          Relógios parando exatamente às <strong>3:07 da manhã</strong>, o cheiro pútrido de carne em decomposição surgindo do nada, hematomas inexplicáveis e entidades que se escondem atrás das portas ao brincar de <em>“Esconde-Esconde com Palmas”</em>.
+        </p>
+        <blockquote class="warren-quote">
+          “Existem três estágios na atividade demoníaca: infestação, opressão e possessão.”
+          <footer>— Ed Warren, Demonologista</footer>
+        </blockquote>
+      </div>
+      <div class="evidence-card">
+        <div class="tape"></div>
+        <div class="evidence-header">FICHA TÉCNICA DO CASO</div>
+        <ul class="evidence-list">
+          <li><strong>Ano dos Eventos:</strong> 1971</li>
+          <li><strong>Localização:</strong> 1677 Round Top Rd, Harrisville, RI</li>
+          <li><strong>Direção Cinematográfica:</strong> James Wan (2013)</li>
+          <li><strong>Investigadores:</strong> Ed & Lorraine Warren</li>
+          <li><strong>Entidade Principal:</strong> Bathsheba Sherman (1812–1885)</li>
+          <li><strong>Status do Caso:</strong> <span class="danger-text">EXTREMAMENTE PERIGOSO</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Dossiês Interativos -->
+  <section id="dossies" class="section container">
+    <div class="section-header">
+      <span class="case-number">ARQUIVO RESTRITO // MUSEU DO OCULTO</span>
+      <h2>Dossiês & Evidências</h2>
+      <p class="section-desc">Clique em uma pasta confidencial para inspecionar os registros dos Warren.</p>
+    </div>
+
+    <div class="folders-grid">
+      <article class="folder-card" data-dossier="warrens">
+        <div class="folder-tab">ARQUIVO #01</div>
+        <div class="stamp-confidential">CONFIDENCIAL</div>
+        <h3>Ed & Lorraine Warren</h3>
+        <p>Demonologista e clarividente responsáveis pela investigação de Harrisville.</p>
+        <span class="read-more">Inspecionar Arquivo →</span>
+      </article>
+
+      <article class="folder-card" data-dossier="bathsheba">
+        <div class="folder-tab">ARQUIVO #02</div>
+        <div class="stamp-confidential">PERIGO EXTREMO</div>
+        <h3>Bathsheba Sherman</h3>
+        <p>A bruxa acusada de sacrificar seu próprio filho e amaldiçoar a terra.</p>
+        <span class="read-more">Inspecionar Arquivo →</span>
+      </article>
+
+      <article class="folder-card" data-dossier="annabelle">
+        <div class="folder-tab">ARQUIVO #03</div>
+        <div class="stamp-confidential">CONTIDA</div>
+        <h3>A Boneca Annabelle</h3>
+        <p>O conduíte usado por uma entidade inumana antes mesmo de Harrisville.</p>
+        <span class="read-more">Inspecionar Arquivo →</span>
+      </article>
+
+      <article class="folder-card" data-dossier="musicbox">
+        <div class="folder-tab">ARQUIVO #04</div>
+        <div class="stamp-confidential">EVIDÊNCIA</div>
+        <h3>A Caixa de Música</h3>
+        <p>O espelho giratório que revela o que os olhos humanos não conseguem ver.</p>
+        <span class="read-more">Inspecionar Arquivo →</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- Cronologia & Fenômenos -->
+  <section id="cronologia" class="section container">
+    <div class="section-header">
+      <span class="case-number">REGISTRO DE ATIVIDADE PARANORMAL</span>
+      <h2>Escalada da Infestação</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time-badge">DIA 01</div>
+        <div class="timeline-content">
+          <h3>A Chegada e a Porta Selada</h3>
+          <p>A família encontra o acesso ao porão bloqueado por tábuas e móveis antigos. O cachorro Sadie recusa-se terminantemente a entrar na casa.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-badge">03:07 AM</div>
+        <div class="timeline-content">
+          <h3>A Hora da Bruxa</h3>
+          <p>Todos os relógios da residência param simultaneamente às 3:07 da manhã — uma zombaria à Santíssima Trindade (3:00 PM, hora da crucificação).</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-badge">ESTÁGIO II</div>
+        <div class="timeline-content">
+          <h3>Esconde-Esconde com Palmas</h3>
+          <p>Brincando de olhos vendados, Carolyn segue o som de duas palmas vindas de dentro do guarda-roupa — onde nenhuma de suas filhas estava.</p>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="time-badge">ESTÁGIO III</div>
+        <div class="timeline-content">
+          <h3>O Exorcismo no Porão</h3>
+          <p>Sem tempo para esperar a autorização formal do Vaticano, Ed Warren realiza o rito de exorcismo enquanto Lorraine luta pela alma de Carolyn.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Guia GitHub Pages -->
+  <footer id="github" class="footer">
+    <div class="container">
+      <div class="github-box">
+        <h3>📂 Como hospedar este site no GitHub Pages</h3>
+        <ol>
+          <li>Crie um novo repositório público no <strong>GitHub</strong> (ex: <code>invocacao-do-mal</code>).</li>
+          <li>Envie os arquivos <code>index.html</code>, <code>style.css</code> e <code>script.js</code> para a raiz do repositório.</li>
+          <li>Vá em <strong>Settings (Configurações) &gt; Pages</strong> no menu do repositório.</li>
+          <li>Em <em>Branch</em>, selecione <strong>main</strong> e a pasta <strong>/ (root)</strong>, depois clique em <strong>Save</strong>.</li>
+        </ol>
+      </div>
+      <p class="copyright">
+        Tributo cinematográfico a <em>The Conjuring</em> (2013) • Desenvolvido para GitHub Pages.
+      </p>
+    </div>
+  </footer>
+
+  <!-- Modal de Inspeção de Dossiê -->
+  <div id="dossier-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-paper">
+      <button id="close-modal" class="modal-close" aria-label="Fechar arquivo">✕ FECHAR PASTA</button>
+      <div class="modal-stamp" id="modal-stamp">CONFIDENCIAL</div>
+      <span class="modal-code" id="modal-code">ARQUIVO #00</span>
+      <h2 id="modal-title">Título do Arquivo</h2>
+      <div id="modal-body" class="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
