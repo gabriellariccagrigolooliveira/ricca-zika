@@ -1,200 +1,303 @@
-// Banco de dados dos dossiês confidenciais
-const dossiersData = {
-  warrens: {
-    code: "ARQUIVO #01 // INVESTIGADORES",
-    stamp: "CONFIDENCIAL",
-    title: "Ed & Lorraine Warren",
-    paragraphs: [
-      "Edward Warren Miney (1926–2006) foi o único demonologista leigo reconhecido pela Igreja Católica. Ao lado de sua esposa Lorraine (1927–2019), clarividente e médium de transe, fundou em 1952 a New England Society for Psychic Research (NESPR).",
-      "Em 1971, ao investigarem a fazenda dos Perron, Lorraine imediatamente detectou uma presença maligna presa à propriedade — uma entidade que não apenas assombrava a casa, mas buscava destruir a matriarca da família.",
-      "Os registros em fita magnética e fotografias coletados por Ed durante o caso de Harrisville permanecem entre os documentos mais perturbadores de seu acervo."
-    ]
-  },
-  bathsheba: {
-    code: "ARQUIVO #02 // ENTIDADE INUMANA",
-    stamp: "PERIGO EXTREMO",
-    title: "Bathsheba Sherman",
-    paragraphs: [
-      "Nascida em 1812 em Rhode Island, Bathsheba Thayer casou-se com Judson Sherman e viveu na propriedade que mais tarde pertenceria à família Perron.",
-      "De acordo com a investigação histórica conduzida pelos Warren, Bathsheba praticava bruxaria e teria sacrificado seu próprio filho recém-nascido como oferenda ao demônio antes de tirar a própria vida em 1885, amaldiçoando qualquer pessoa que ousasse tomar suas terras.",
-      "Seu espírito demoníaco concentra-se em possuir mães que vivem na casa, forçando-as a repetir o ato contra seus próprios filhos."
-    ]
-  },
-  annabelle: {
-    code: "ARQUIVO #03 // MUSEU DO OCULTO",
-    stamp: "CONTIDA EM VIDRO BENTO",
-    title: "A Boneca Annabelle",
-    paragraphs: [
-      "Antes de irem a Harrisville, os Warren investigaram o caso de duas enfermeiras atormentadas por uma boneca de pano Raggedy Ann que parecia se mover sozinha e deixar bilhetes manuscritos.",
-      "Lorraine descobriu que a boneca nunca foi possuída pelo espírito de uma criança, mas sim manipulada como um conduíte por uma entidade inumana que buscava um hospedeiro humano.",
-      "Hoje, a boneca permanece trancada em uma caixa de madeira e vidro abençoado no Museu do Oculto dos Warren, em Monroe, Connecticut, com o aviso: 'POSITIVAMENTE NÃO ABRA'."
-    ]
-  },
-  musicbox: {
-    code: "ARQUIVO #04 // OBJETO DE CONTATO",
-    stamp: "EVIDÊNCIA REGISTRADA",
-    title: "A Caixa de Música",
-    paragraphs: [
-      "Encontrada por April Perron nos terrenos da fazenda, a antiga caixa de música possui um pequeno espelho giratório que, quando acionado, revela reflexos de espíritos presos à propriedade.",
-      "Quando a melodia termina abruptamente, uma presença se manifesta logo atrás de quem observa o espelho.",
-      "O objeto foi recolhido por Ed e Lorraine Warren após o exorcismo em Harrisville para evitar novas aberturas de contato espiritual."
-    ]
-  }
-};
-
-// Controle do Modal de Dossiês
-const modal = document.getElementById("dossier-modal");
-const closeModalBtn = document.getElementById("close-modal");
-const modalStamp = document.getElementById("modal-stamp");
-const modalCode = document.getElementById("modal-code");
-const modalTitle = document.getElementById("modal-title");
-const modalBody = document.getElementById("modal-body");
-
-document.querySelectorAll(".folder-card").forEach((card) => {
-  card.addEventListener("click", () => {
-    const key = card.getAttribute("data-dossier");
-    const data = dossiersData[key];
-    if (!data) return;
-
-    modalStamp.textContent = data.stamp;
-    modalCode.textContent = data.code;
-    modalTitle.textContent = data.title;
-    modalBody.innerHTML = data.paragraphs.map((p) => `<p>${p}</p>`).join("");
-
-    modal.classList.remove("hidden");
+document.addEventListener('DOMContentLoaded', () => {
+  /* =========================================
+     1. EFEITO DE LANTERNA NO CURSOR
+     ========================================= */
+  const flashlight = document.getElementById('flashlight');
+  window.addEventListener('mousemove', (e) => {
+    flashlight.style.setProperty('--mouse-x', `${e.clientX}px`);
+    flashlight.style.setProperty('--mouse-y', `${e.clientY}px`);
   });
-});
 
-closeModalBtn.addEventListener("click", () => {
-  modal.classList.add("hidden");
-});
+  /* =========================================
+     2. PARTÍCULAS DE POEIRA EM SUSPENSÃO (CANVAS)
+     ========================================= */
+  const canvas = document.getElementById('dust-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
 
-modal.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.classList.add("hidden");
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
   }
-});
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-// Modo "Apagar Luzes" (Lanterna no cursor)
-const btnLights = document.getElementById("btn-lights");
-const overlay = document.getElementById("flashlight-overlay");
-
-btnLights.addEventListener("click", () => {
-  document.body.classList.toggle("lights-off");
-  const isDark = document.body.classList.contains("lights-off");
-  btnLights.textContent = isDark ? "💡 Acender Luzes" : "🔦 Apagar Luzes";
-});
-
-window.addEventListener("mousemove", (e) => {
-  overlay.style.setProperty("--x", `${e.clientX}px`);
-  overlay.style.setProperty("--y", `${e.clientY}px`);
-});
-
-window.addEventListener("touchmove", (e) => {
-  if (e.touches.length > 0) {
-    overlay.style.setProperty("--x", `${e.touches[0].clientX}px`);
-    overlay.style.setProperty("--y", `${e.touches[0].clientY}px`);
-  }
-});
-
-// Sintetizador de Áudio (Web Audio API — sem precisar baixar MP3)
-let audioCtx = null;
-let ambientOsc = null;
-let isAmbientOn = false;
-
-function initAudio() {
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
-}
-
-// Som ambiente sombrio (Drone grave)
-const btnAudio = document.getElementById("btn-audio");
-
-btnAudio.addEventListener("click", () => {
-  initAudio();
-
-  if (!isAmbientOn) {
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc1.type = "sawtooth";
-    osc1.frequency.value = 48; // Frequência grave sombria
-
-    osc2.type = "sine";
-    osc2.frequency.value = 51; // Batimento binaural inquietante
-
-    const filter = audioCtx.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 140;
-
-    gain.gain.value = 0.08;
-
-    osc1.connect(filter);
-    osc2.connect(filter);
-    filter.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc1.start();
-    osc2.start();
-
-    ambientOsc = { osc1, osc2 };
-    isAmbientOn = true;
-    btnAudio.textContent = "🔊 Áudio: ON";
-  } else {
-    if (ambientOsc) {
-      ambientOsc.osc1.stop();
-      ambientOsc.osc2.stop();
-      ambientOsc = null;
+  class DustParticle {
+    constructor() {
+      this.reset();
     }
-    isAmbientOn = false;
-    btnAudio.textContent = "🔇 Áudio: OFF";
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.size = Math.random() * 1.8 + 0.4;
+      this.speedX = (Math.random() - 0.5) * 0.3;
+      this.speedY = -Math.random() * 0.35 - 0.1;
+      this.alpha = Math.random() * 0.45 + 0.1;
+    }
+    update() {
+      this.x += this.speedX;
+      this.y += this.speedY;
+      if (this.y < 0 || this.x < 0 || this.x > canvas.width) {
+        this.reset();
+        this.y = canvas.height;
+      }
+    }
+    draw() {
+      ctx.fillStyle = `rgba(216, 200, 168, ${this.alpha})`;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
-});
 
-// Efeito sonoro das "Duas Palmas na Escuridão"
-function triggerClapSound(delay = 0) {
-  initAudio();
-  const now = audioCtx.currentTime + delay;
-
-  const bufferSize = audioCtx.sampleRate * 0.15;
-  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-  const data = buffer.getChannelData(0);
-
-  for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.025));
+  for (let i = 0; i < 65; i++) {
+    particles.push(new DustParticle());
   }
 
-  const noise = audioCtx.createBufferSource();
-  noise.buffer = buffer;
+  function animateDust() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach((p) => {
+      p.update();
+      p.draw();
+    });
+    requestAnimationFrame(animateDust);
+  }
+  animateDust();
 
-  const filter = audioCtx.createBiquadFilter();
-  filter.type = "bandpass";
-  filter.frequency.value = 1100;
-  filter.Q.value = 1.2;
+  /* =========================================
+     3. CRONOLOGIA INTERATIVA (ESTÁGIOS DA ASSOMBRAÇÃO)
+     ========================================= */
+  const stagesData = {
+    1: {
+      title: 'Estágio I: Infestação',
+      quote: '“Começa com passos no corredor, batidas nas paredes e o cheiro de carne podre.”',
+      description:
+        'A entidade testa os limites dos moradores da casa. Ruídos inexplicáveis surgem durante a madrugada e animais demonstram terror instintivo.',
+      events: [
+        'Todos os relógios param simultaneamente às 03:07 AM (horário da morte de Bathsheba).',
+        'A cachorra Sadie recusa-se a entrar na residência e é encontrada morta no quintal.',
+        'As meninas ouvem palmas vindas do porão durante a brincadeira de esconde-esconde.'
+      ]
+    },
+    2: {
+      title: 'Estágio II: Opressão',
+      quote: '“A entidade escolhe o elo mais fraco da família para quebrar sua vontade física e mental.”',
+      description:
+        'Os fenômenos tornam-se físicos e agressivos. O objetivo do demônio é exaurir a vítima escolhida até que sua resistência espiritual entre em colapso.',
+      events: [
+        'Carolyn acorda diariamente com hematomas escuros espalhados pelos braços e pernas.',
+        'Quadros caem das escadas e portas batem com violência sobrehumanas.',
+        'Christine tem os pés puxados durante a noite por uma figura invisível.'
+      ]
+    },
+    3: {
+      title: 'Estágio III: Possessão',
+      quote: '“Sem autorização formal da Igreja, Ed Warren realiza o rito de exorcismo no porão.”',
+      description:
+        'No estágio final, Bathsheba toma controle completo do corpo de Carolyn, tentando levá-la a sacrificar suas próprias filhas, repetindo a maldição de 1863.',
+      events: [
+        'Carolyn tenta fugir com April e Christine para o porão durante uma tempestade.',
+        'Lorraine alcança a alma de Carolyn lembrando-a de uma memória feliz na praia.',
+        'O demônio é expulso de volta ao inferno, libertando a família Perron.'
+      ]
+    }
+  };
 
-  const gain = audioCtx.createGain();
-  gain.gain.setValueAtTime(0.6, now);
-  gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+  const timelineContent = document.getElementById('timeline-content');
+  const tabButtons = document.querySelectorAll('.tab-btn');
 
-  noise.connect(filter);
-  filter.connect(gain);
-  gain.connect(audioCtx.destination);
+  function renderStage(stageKey) {
+    const data = stagesData[stageKey];
+    timelineContent.innerHTML = `
+      <h3>${data.title}</h3>
+      <span class="stage-quote">${data.quote}</span>
+      <p>${data.description}</p>
+      <ul>
+        ${data.events.map((ev) => `<li>${ev}</li>`).join('')}
+      </ul>
+    `;
+  }
 
-  noise.start(now);
-}
+  tabButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      tabButtons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderStage(btn.dataset.stage);
+    });
+  });
 
-const btnClaps = document.getElementById("btn-claps");
+  renderStage(1);
 
-btnClaps.addEventListener("click", () => {
-  triggerClapSound(0);
-  triggerClapSound(0.28);
+  /* =========================================
+     4. MODAL DO MUSEU OCULTO DOS WARREN
+     ========================================= */
+  const artifactsData = {
+    annabelle: {
+      code: 'ARTEFATO #001 // CONTENÇÃO MÁXIMA',
+      title: 'Boneca Annabelle',
+      description:
+        'Originalmente uma boneca Raggedy Ann dada a uma estudante de enfermagem em 1970. Não é possuída pelo espírito de uma menina, mas usada como condutor por uma entidade demoníaca inumana que buscava possuir um hospedeiro humano.',
+      protocol: 'Protocolo: Trancada em caixa de vidro abençoada. Um padre abençoa o local duas vezes por mês.'
+    },
+    musicbox: {
+      code: 'ARTEFATO #014 // CASO PERRON',
+      title: 'Caixa de Música com Espelho',
+      description:
+        'Encontrada por April Perron nos terrenos da fazenda em Harrisville. Quando a manivela é girada e a melodia toca, o espelho reflete espíritos invisíveis a olho nu posicionados atrás de quem observa.',
+      protocol: 'Protocolo: Manter o mecanismo travado. Proibido acionar a melodia.'
+    },
+    clock: {
+      code: 'ARTEFATO #019 // CASO PERRON',
+      title: 'Relógio de Pêndulo da Fazenda',
+      description:
+        'Pertencia aos antigos moradores da casa em Rhode Island. Mesmo após ter suas engrenagens reparadas, seus ponteiros sempre travavam exatamente às 03:07 da manhã em zombaria à Santíssima Trindade.',
+      protocol: 'Protocolo: Mantido sem corda na sala de contenção.'
+    },
+    organ: {
+      code: 'ARTEFATO #042 // REGISTRO SONORO',
+      title: 'Órgão de Tubos',
+      description:
+        'Recuperado de uma residência assombrada onde acordes fúnebres eram ouvidos exatamente à meia-noite, mesmo com o instrumento completamente desconectado e trancado.',
+      protocol: 'Protocolo: Isolado e selado com água benta.'
+    }
+  };
 
-  document.body.classList.remove("clap-flash");
-  void document.body.offsetWidth; // Reinicia animação
-  document.body.classList.add("clap-flash");
+  const modal = document.getElementById('artifact-modal');
+  const closeModalBtn = document.getElementById('close-modal');
+  const modalBackdrop = document.querySelector('.modal-backdrop');
+
+  document.querySelectorAll('.artifact-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const info = artifactsData[card.dataset.artifact];
+      document.getElementById('modal-code').textContent = info.code;
+      document.getElementById('modal-title').textContent = info.title;
+      document.getElementById('modal-description').textContent = info.description;
+      document.getElementById('modal-protocol').textContent = info.protocol;
+      modal.classList.remove('hidden');
+    });
+  });
+
+  function closeModal() {
+    modal.classList.add('hidden');
+  }
+  closeModalBtn.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+
+  /* =========================================
+     5. ÁUDIO AMBIENTE SOMBRIO (WEB AUDIO API)
+     ========================================= */
+  let audioCtx = null;
+  let isPlayingAudio = false;
+  let droneOsc1, droneOsc2, tickInterval;
+
+  const audioToggle = document.getElementById('audio-toggle');
+  const audioIcon = document.getElementById('audio-icon');
+
+  function toggleAmbientAudio() {
+    if (!isPlayingAudio) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+      // Drone grave sombrio
+      droneOsc1 = audioCtx.createOscillator();
+      droneOsc2 = audioCtx.createOscillator();
+      const masterGain = audioCtx.createGain();
+
+      droneOsc1.type = 'sawtooth';
+      droneOsc1.frequency.setValueAtTime(55, audioCtx.currentTime); // Lá grave
+
+      droneOsc2.type = 'sine';
+      droneOsc2.frequency.setValueAtTime(58.5, audioCtx.currentTime); // Batimento dissonante
+
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(140, audioCtx.currentTime);
+
+      masterGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+
+      droneOsc1.connect(filter);
+      droneOsc2.connect(filter);
+      filter.connect(masterGain);
+      masterGain.connect(audioCtx.destination);
+
+      droneOsc1.start();
+      droneOsc2.start();
+
+      // Tique-taque sutil de relógio a cada 1 segundo
+      tickInterval = setInterval(() => {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.05);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.05);
+      }, 1000);
+
+      isPlayingAudio = true;
+      audioIcon.textContent = '🔊';
+    } else {
+      clearInterval(tickInterval);
+      if (droneOsc1) droneOsc1.stop();
+      if (droneOsc2) droneOsc2.stop();
+      if (audioCtx) audioCtx.close();
+      audioCtx = null;
+      isPlayingAudio = false;
+      audioIcon.textContent = '🔇';
+    }
+  }
+
+  audioToggle.addEventListener('click', toggleAmbientAudio);
+
+  /* =========================================
+     6. EASTER EGG: 03:07 AM (DUAS PALMAS NO ESCURO)
+     ========================================= */
+  const clockTrigger = document.getElementById('clock-trigger');
+  const clapOverlay = document.getElementById('clap-overlay');
+
+  function playClapSound(delay = 0) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const bufferSize = ctx.sampleRate * 0.15;
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.025));
+    }
+
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 1100;
+
+    const gain = ctx.createGain();
+    gain.gain.value = 0.6;
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start(ctx.currentTime + delay);
+  }
+
+  clockTrigger.addEventListener('click', () => {
+    clapOverlay.classList.remove('hidden');
+    document.body.classList.add('shake-screen');
+
+    playClapSound(0.3);
+    playClapSound(0.85);
+
+    setTimeout(() => {
+      document.body.classList.remove('shake-screen');
+    }, 500);
+
+    setTimeout(() => {
+      clapOverlay.classList.add('hidden');
+    }, 3400);
+  });
 });
